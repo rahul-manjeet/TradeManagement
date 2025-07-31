@@ -3,5 +3,7 @@
         <element attributes="ignore_filter_on_new=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
         <element label="Stock Name" max_length="40" name="stock_name" type="string"/>
         <element label="Date" max_length="40" name="date" type="glide_date"/>
+        <element label="Buying Price" max_length="40" name="buying_price" type="string"/>
+        <element label="Stop Loss" max_length="40" name="stop_loss" type="string"/>
     </element>
 </database>
