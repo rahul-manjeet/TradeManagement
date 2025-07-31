@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="x_snc_trade_mana_0_trade_book">
+    <x_snc_trade_mana_0_trade_book action="INSERT_OR_UPDATE">
+        <buying_price>875.30</buying_price>
+        <date>2024-01-18</date>
+        <number>TRA0001004</number>
+        <stock_name>Tesla Inc. (TSLA)</stock_name>
+        <stop_loss>820.00</stop_loss>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-01-18 14:20:00</sys_created_on>
+        <sys_id>d4e5f6789012345678901234dddddddd</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-01-18 14:20:00</sys_updated_on>
+    </x_snc_trade_mana_0_trade_book>
+</record_update>

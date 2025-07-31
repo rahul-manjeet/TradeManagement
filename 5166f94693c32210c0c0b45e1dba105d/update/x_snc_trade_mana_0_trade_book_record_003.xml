@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="x_snc_trade_mana_0_trade_book">
+    <x_snc_trade_mana_0_trade_book action="INSERT_OR_UPDATE">
+        <buying_price>425.50</buying_price>
+        <date>2024-01-17</date>
+        <number>TRA0001003</number>
+        <stock_name>Microsoft Corp. (MSFT)</stock_name>
+        <stop_loss>400.00</stop_loss>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-01-17 11:45:00</sys_created_on>
+        <sys_id>c3d4e5f6789012345678901234cccccc</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-01-17 11:45:00</sys_updated_on>
+    </x_snc_trade_mana_0_trade_book>
+</record_update>

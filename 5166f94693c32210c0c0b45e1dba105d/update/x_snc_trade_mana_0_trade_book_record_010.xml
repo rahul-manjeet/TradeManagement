@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="x_snc_trade_mana_0_trade_book">
+    <x_snc_trade_mana_0_trade_book action="INSERT_OR_UPDATE">
+        <buying_price>275.20</buying_price>
+        <date>2024-01-26</date>
+        <number>TRA0001010</number>
+        <stock_name>PayPal Holdings Inc. (PYPL)</stock_name>
+        <stop_loss>250.00</stop_loss>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-01-26 11:00:00</sys_created_on>
+        <sys_id>012345678901234jjjjjjjjjjjj</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-01-26 11:00:00</sys_updated_on>
+    </x_snc_trade_mana_0_trade_book>
+</record_update>
