@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_user_group">
+    <sys_user_group action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <cost_center/>
+        <default_assignee/>
+        <description>Group for trade managers who should receive notifications about new trade records</description>
+        <email>trade.managers@company.com</email>
+        <exclude_manager>false</exclude_manager>
+        <include_members>true</include_members>
+        <manager/>
+        <name>Trade Managers</name>
+        <parent/>
+        <roles/>
+        <source/>
+        <sys_class_name>sys_user_group</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-01-31 15:15:00</sys_created_on>
+        <sys_id>e5f6789012345678901234ffffffffff</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_package display_value="Trade Management" source="x_snc_trade_mana_0">5166f94693c32210c0c0b45e1dba105d</sys_package>
+        <sys_scope display_value="Trade Management">5166f94693c32210c0c0b45e1dba105d</sys_scope>
+        <sys_update_name>sys_user_group_e5f6789012345678901234ffffffffff</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-01-31 15:15:00</sys_updated_on>
+        <type/>
+    </sys_user_group>
+</record_update>

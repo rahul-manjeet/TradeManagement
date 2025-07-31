@@ -29,78 +29,49 @@
         <script><![CDATA[// Business Rule: Trade Book Insert Notification
 // Trigger: After Insert
 // Table: x_snc_trade_mana_0_trade_book
-// Purpose: Send notification when new trade record is created
+// Purpose: Trigger notification event when new trade record is created
+// Uses ServiceNow's event-driven notification system
 
 (function executeRule(current, previous /*null when async*/) {
     
     try {
-        // Get the trade details
+        // Get the trade details for event parameters
         var stockName = current.stock_name || 'Unknown Stock';
-        var buyingPrice = current.buying_price || 'N/A';
-        var stopLoss = current.stop_loss || 'N/A';
         var tradeNumber = current.number || 'N/A';
-        var tradeDate = current.date || 'N/A';
         
-        // Get current date/time for notification
-        var currentDateTime = new GlideDateTime().getDisplayValue();
-        var instanceUrl = gs.getProperty('glide.servlet.uri');
+        // Log the business rule execution
+        gs.info('Trade Book Business Rule: Processing new trade record for ' + stockName + ' (Trade #' + tradeNumber + ')');
         
-        // Create notification using email template
-        var notification = new GlideRecord('sys_email');
-        notification.initialize();
-        notification.type = 'send-ready';
-        notification.recipients = 'admin@company.com,trade.managers@company.com'; // Configure as needed
-        notification.subject = 'New Trade Record: ' + stockName + ' - ' + tradeNumber;
-        
-        // Use HTML template for better formatting
-        var emailBody = '<!DOCTYPE html><html><head><style>' +
-                       'body { font-family: Arial, sans-serif; margin: 20px; }' +
-                       '.header { background-color: #0073e6; color: white; padding: 15px; border-radius: 5px; }' +
-                       '.content { padding: 20px; border: 1px solid #ddd; border-radius: 5px; margin-top: 10px; }' +
-                       '.trade-details { background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 10px 0; }' +
-                       '.field { margin: 8px 0; }' +
-                       '.label { font-weight: bold; color: #333; }' +
-                       '.value { color: #666; }' +
-                       '.footer { margin-top: 20px; font-size: 12px; color: #888; }' +
-                       '</style></head><body>' +
-                       '<div class="header"><h2>🔔 New Trade Record Alert</h2></div>' +
-                       '<div class="content">' +
-                       '<p>A new trading position has been recorded in the Trade Book system.</p>' +
-                       '<div class="trade-details"><h3>Trade Details:</h3>' +
-                       '<div class="field"><span class="label">Trade Number:</span> <span class="value">' + tradeNumber + '</span></div>' +
-                       '<div class="field"><span class="label">Stock Name:</span> <span class="value">' + stockName + '</span></div>' +
-                       '<div class="field"><span class="label">Buying Price:</span> <span class="value">$' + buyingPrice + '</span></div>' +
-                       '<div class="field"><span class="label">Stop Loss:</span> <span class="value">$' + stopLoss + '</span></div>' +
-                       '<div class="field"><span class="label">Trade Date:</span> <span class="value">' + tradeDate + '</span></div>' +
-                       '</div>' +
-                       '<p><strong>Action Required:</strong> Please review this trade record in the Trade Book application.</p>' +
-                       '<p><a href="' + instanceUrl + '/x_snc_trade_mana_0_trade_book_list.do" style="background-color: #0073e6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View Trade Book</a></p>' +
-                       '</div>' +
-                       '<div class="footer">' +
-                       '<p>This is an automated notification from the Trade Management System.</p>' +
-                       '<p>Generated on: ' + currentDateTime + '</p>' +
-                       '</div></body></html>';
-        
-        notification.body = emailBody;
-        notification.content_type = 'text/html';
-        notification.insert();
-        
-        // Log the notification
-        gs.info('Trade Book Notification: New trade record created for ' + stockName + ' (Trade #' + tradeNumber + ') - Email sent to administrators');
-        
-        // Create system event for additional processing
+        // Trigger the notification event using ServiceNow's event system
+        // This will be handled by the notification record we created
+        // Event name: trade.book.record.inserted
+        // Parameter 1: Stock Name
+        // Parameter 2: Trade Number
+        // Current record is automatically passed to the notification
         gs.eventQueue('trade.book.record.inserted', current, stockName, tradeNumber);
         
-        // Optional: Create a system notification for in-app alerts
-        var sysNotification = new GlideRecord('sys_push_notif_msg');
-        sysNotification.initialize();
-        sysNotification.title = 'New Trade Record';
-        sysNotification.message = 'New trade created: ' + stockName + ' (' + tradeNumber + ')';
-        sysNotification.user = 'admin'; // Configure as needed
-        sysNotification.insert();
+        // Log successful event trigger
+        gs.info('Trade Book Event: Successfully queued notification event for ' + stockName + ' (Trade #' + tradeNumber + ')');
+        
+        // Optional: Create additional system activities if needed
+        // This could include:
+        // - Updating related records
+        // - Triggering workflows
+        // - Creating tasks or approvals
+        // - Integration with external systems
+        
+        // Example: Create activity log entry
+        var activity = new GlideRecord('sys_journal_field');
+        activity.initialize();
+        activity.element = 'activity';
+        activity.element_id = current.sys_id;
+        activity.table = 'x_snc_trade_mana_0_trade_book';
+        activity.value = 'Trade record created and notification sent for ' + stockName + ' at buying price $' + current.buying_price + ' with stop loss $' + current.stop_loss;
+        activity.insert();
         
     } catch (error) {
         gs.error('Error in Trade Book Insert Notification business rule: ' + error.message);
+        gs.error('Stack trace: ' + error.stack);
     }
     
 })(current, previous);]]></script>
