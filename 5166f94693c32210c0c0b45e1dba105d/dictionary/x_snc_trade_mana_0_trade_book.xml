@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="ba86318693c32210c0c0b45e1dba1060" label="Trade Book" max_length="40" name="x_snc_trade_mana_0_trade_book" type="collection">
+        <element attributes="ignore_filter_on_new=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element label="Stock Name" max_length="40" name="stock_name" type="string"/>
+        <element label="Date" max_length="40" name="date" type="glide_date"/>
+    </element>
+</database>

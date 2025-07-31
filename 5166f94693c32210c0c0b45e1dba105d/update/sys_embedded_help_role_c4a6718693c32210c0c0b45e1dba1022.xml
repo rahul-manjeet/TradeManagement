@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_embedded_help_role">
+    <sys_embedded_help_role action="INSERT_OR_UPDATE">
+        <order>1000</order>
+        <role display_value="x_snc_trade_mana_0.trade_book_user" name="x_snc_trade_mana_0.trade_book_user">00a6718693c32210c0c0b45e1dba1021</role>
+        <sys_class_name>sys_embedded_help_role</sys_class_name>
+        <sys_created_by>manjeet.kumar@snc</sys_created_by>
+        <sys_created_on>2025-07-31 13:44:28</sys_created_on>
+        <sys_id>c4a6718693c32210c0c0b45e1dba1022</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>00a6718693c32210c0c0b45e1dba1021</sys_name>
+        <sys_package display_value="Trade Management" source="x_snc_trade_mana_0">5166f94693c32210c0c0b45e1dba105d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Trade Management">5166f94693c32210c0c0b45e1dba105d</sys_scope>
+        <sys_update_name>sys_embedded_help_role_c4a6718693c32210c0c0b45e1dba1022</sys_update_name>
+        <sys_updated_by>manjeet.kumar@snc</sys_updated_by>
+        <sys_updated_on>2025-07-31 13:44:28</sys_updated_on>
+    </sys_embedded_help_role>
+</record_update>
