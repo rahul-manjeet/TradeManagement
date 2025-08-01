@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_aw_page">
+    <sys_aw_page action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description>Dashboard page with comprehensive analytics and reports for trade data</description>
+        <name>Trade Dashboard</name>
+        <order>300</order>
+        <page_definition><![CDATA[{
+  "layout": {
+    "type": "container",
+    "children": [
+      {
+        "type": "header",
+        "title": "📊 Trade Analytics Dashboard",
+        "subtitle": "Comprehensive insights into your trading portfolio",
+        "actions": [
+          {
+            "type": "button",
+            "label": "Refresh Data",
+            "variant": "primary",
+            "action": "refresh_dashboard",
+            "icon": "refresh"
+          },
+          {
+            "type": "button",
+            "label": "Export Reports",
+            "variant": "secondary",
+            "action": "export_reports",
+            "icon": "download"
+          }
+        ]
+      },
+      {
+        "type": "metrics_row",
+        "title": "Key Performance Indicators",
+        "metrics": [
+          {
+            "title": "Total Portfolio Value",
+            "value": "${sum:buying_price}",
+            "format": "currency",
+            "icon": "trending-up",
+            "color": "green",
+            "trend": {
+              "value": "+5.2%",
+              "direction": "up"
+            }
+          },
+          {
+            "title": "Total Risk Exposure",
+            "value": "${sum:stop_loss}",
+            "format": "currency",
+            "icon": "shield",
+            "color": "red",
+            "trend": {
+              "value": "-2.1%",
+              "direction": "down"
+            }
+          },
+          {
+            "title": "Average Trade Size",
+            "value": "${avg:buying_price}",
+            "format": "currency",
+            "icon": "bar-chart",
+            "color": "blue"
+          },
+          {
+            "title": "Active Positions",
+            "value": "${count}",
+            "format": "number",
+            "icon": "activity",
+            "color": "purple"
+          }
+        ]
+      },
+      {
+        "type": "charts_grid",
+        "title": "Analytics Reports",
+        "grid_layout": "2x2",
+        "charts": [
+          {
+            "title": "Stock Distribution",
+            "type": "report_widget",
+            "report_id": "a1b2c3d4e5f6789012345678901234aa",
+            "chart_type": "bar",
+            "description": "Investment distribution across different stocks",
+            "size": "medium"
+          },
+          {
+            "title": "Daily Trading Activity",
+            "type": "report_widget",
+            "report_id": "b2c3d4e5f6789012345678901234bbbb",
+            "chart_type": "pie",
+            "description": "Trade frequency by date",
+            "size": "medium"
+          },
+          {
+            "title": "Risk Analysis",
+            "type": "report_widget",
+            "report_id": "c3d4e5f6789012345678901234cccccc",
+            "chart_type": "column",
+            "description": "Stop loss distribution and risk exposure",
+            "size": "medium"
+          },
+          {
+            "title": "Portfolio Performance",
+            "type": "report_widget",
+            "report_id": "f6789012345678901234ffffffffffff",
+            "chart_type": "line",
+            "description": "Investment trends over time",
+            "size": "medium"
+          }
+        ]
+      },
+      {
+        "type": "data_table",
+        "title": "Top Performing Stocks",
+        "table": "x_snc_trade_mana_0_trade_book",
+        "query": "ORDER BY buying_price DESC",
+        "limit": 5,
+        "columns": [
+          {
+            "field": "stock_name",
+            "label": "Stock",
+            "width": "40%"
+          },
+          {
+            "field": "buying_price",
+            "label": "Price",
+            "width": "20%",
+            "format": "currency"
+          },
+          {
+            "field": "stop_loss",
+            "label": "Stop Loss",
+            "width": "20%",
+            "format": "currency"
+          },
+          {
+            "field": "date",
+            "label": "Date",
+            "width": "20%",
+            "format": "date"
+          }
+        ]
+      },
+      {
+        "type": "insights_panel",
+        "title": "📈 Trading Insights",
+        "insights": [
+          {
+            "type": "insight",
+            "title": "Portfolio Diversification",
+            "description": "Your portfolio is well-diversified across 10 different stocks, reducing overall risk.",
+            "status": "positive",
+            "icon": "check-circle"
+          },
+          {
+            "type": "insight",
+            "title": "Risk Management",
+            "description": "All positions have stop-loss orders in place, showing good risk management practices.",
+            "status": "positive",
+            "icon": "shield"
+          },
+          {
+            "type": "insight",
+            "title": "Investment Focus",
+            "description": "Heavy concentration in technology stocks. Consider diversifying into other sectors.",
+            "status": "warning",
+            "icon": "alert-triangle"
+          },
+          {
+            "type": "insight",
+            "title": "Recent Activity",
+            "description": "Most trades were executed in January 2024. Consider regular portfolio reviews.",
+            "status": "info",
+            "icon": "info"
+          }
+        ]
+      }
+    ]
+  }
+}]]></page_definition>
+        <roles/>
+        <sys_class_name>sys_aw_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-01 07:20:00</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>d4e5f6789012345678901234pg03</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Trade Dashboard</sys_name>
+        <sys_package display_value="Trade Management" source="x_snc_trade_mana_0">5166f94693c32210c0c0b45e1dba105d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Trade Management">5166f94693c32210c0c0b45e1dba105d</sys_scope>
+        <sys_update_name>sys_aw_page_d4e5f6789012345678901234pg03</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-01 07:20:00</sys_updated_on>
+        <title>Trade Dashboard</title>
+        <workspace display_value="Trade Book Workspace">a1b2c3d4e5f6789012345678901234ws</workspace>
+    </sys_aw_page>
+</record_update>

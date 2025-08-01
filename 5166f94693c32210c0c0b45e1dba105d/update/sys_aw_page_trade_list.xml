@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_aw_page">
+    <sys_aw_page action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description>List view page showing all trade records with filtering and search capabilities</description>
+        <name>Trade List</name>
+        <order>200</order>
+        <page_definition><![CDATA[{
+  "layout": {
+    "type": "container",
+    "children": [
+      {
+        "type": "header",
+        "title": "📋 Trade Book Records",
+        "subtitle": "View and manage all your trading positions",
+        "actions": [
+          {
+            "type": "button",
+            "label": "New Trade",
+            "variant": "primary",
+            "action": "create_record",
+            "icon": "plus"
+          },
+          {
+            "type": "button",
+            "label": "Export Data",
+            "variant": "secondary",
+            "action": "export_list",
+            "icon": "download"
+          },
+          {
+            "type": "button",
+            "label": "Refresh",
+            "variant": "tertiary",
+            "action": "refresh_list",
+            "icon": "refresh"
+          }
+        ]
+      },
+      {
+        "type": "filters",
+        "title": "Filter Trades",
+        "filters": [
+          {
+            "field": "stock_name",
+            "label": "Stock Name",
+            "type": "string",
+            "operator": "contains"
+          },
+          {
+            "field": "date",
+            "label": "Trade Date",
+            "type": "date_range",
+            "operator": "between"
+          },
+          {
+            "field": "buying_price",
+            "label": "Price Range",
+            "type": "number_range",
+            "operator": "between"
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "table": "x_snc_trade_mana_0_trade_book",
+        "view": "default",
+        "columns": [
+          {
+            "field": "number",
+            "label": "Trade #",
+            "width": "120px",
+            "sortable": true
+          },
+          {
+            "field": "stock_name",
+            "label": "Stock Name",
+            "width": "200px",
+            "sortable": true,
+            "searchable": true
+          },
+          {
+            "field": "buying_price",
+            "label": "Buying Price",
+            "width": "120px",
+            "sortable": true,
+            "format": "currency"
+          },
+          {
+            "field": "stop_loss",
+            "label": "Stop Loss",
+            "width": "120px",
+            "sortable": true,
+            "format": "currency"
+          },
+          {
+            "field": "date",
+            "label": "Trade Date",
+            "width": "120px",
+            "sortable": true,
+            "format": "date"
+          },
+          {
+            "field": "sys_created_on",
+            "label": "Created",
+            "width": "140px",
+            "sortable": true,
+            "format": "datetime"
+          }
+        ],
+        "actions": [
+          {
+            "type": "row_action",
+            "label": "Edit",
+            "action": "edit_record",
+            "icon": "edit"
+          },
+          {
+            "type": "row_action",
+            "label": "View",
+            "action": "view_record",
+            "icon": "eye"
+          },
+          {
+            "type": "row_action",
+            "label": "Delete",
+            "action": "delete_record",
+            "icon": "trash",
+            "confirm": "Are you sure you want to delete this trade record?"
+          }
+        ],
+        "pagination": {
+          "page_size": 25,
+          "show_page_size_options": true,
+          "page_size_options": [10, 25, 50, 100]
+        },
+        "sorting": {
+          "default_field": "date",
+          "default_direction": "desc"
+        }
+      },
+      {
+        "type": "summary_cards",
+        "title": "Quick Statistics",
+        "cards": [
+          {
+            "title": "Total Trades",
+            "value": "${count}",
+            "icon": "trending-up",
+            "color": "blue"
+          },
+          {
+            "title": "Total Investment",
+            "value": "${sum:buying_price}",
+            "icon": "dollar-sign",
+            "color": "green",
+            "format": "currency"
+          },
+          {
+            "title": "Average Price",
+            "value": "${avg:buying_price}",
+            "icon": "bar-chart",
+            "color": "orange",
+            "format": "currency"
+          },
+          {
+            "title": "Risk Exposure",
+            "value": "${sum:stop_loss}",
+            "icon": "shield",
+            "color": "red",
+            "format": "currency"
+          }
+        ]
+      }
+    ]
+  }
+}]]></page_definition>
+        <roles/>
+        <sys_class_name>sys_aw_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-01 07:15:00</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>c3d4e5f6789012345678901234pg02</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Trade List</sys_name>
+        <sys_package display_value="Trade Management" source="x_snc_trade_mana_0">5166f94693c32210c0c0b45e1dba105d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Trade Management">5166f94693c32210c0c0b45e1dba105d</sys_scope>
+        <sys_update_name>sys_aw_page_c3d4e5f6789012345678901234pg02</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-01 07:15:00</sys_updated_on>
+        <title>Trade List</title>
+        <workspace display_value="Trade Book Workspace">a1b2c3d4e5f6789012345678901234ws</workspace>
+    </sys_aw_page>
+</record_update>

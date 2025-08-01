@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_aw_workspace_nav">
+    <sys_aw_workspace_nav action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <icon>plus</icon>
+        <name>New Trade</name>
+        <order>100</order>
+        <page display_value="Trade Entry">b2c3d4e5f6789012345678901234pg01</page>
+        <sys_class_name>sys_aw_workspace_nav</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-01 07:25:00</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>e5f6789012345678901234nav01</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>New Trade</sys_name>
+        <sys_package display_value="Trade Management" source="x_snc_trade_mana_0">5166f94693c32210c0c0b45e1dba105d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Trade Management">5166f94693c32210c0c0b45e1dba105d</sys_scope>
+        <sys_update_name>sys_aw_workspace_nav_e5f6789012345678901234nav01</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-01 07:25:00</sys_updated_on>
+        <workspace display_value="Trade Book Workspace">a1b2c3d4e5f6789012345678901234ws</workspace>
+    </sys_aw_workspace_nav>
+    <sys_aw_workspace_nav action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <icon>list</icon>
+        <name>All Trades</name>
+        <order>200</order>
+        <page display_value="Trade List">c3d4e5f6789012345678901234pg02</page>
+        <sys_class_name>sys_aw_workspace_nav</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-01 07:25:00</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>f6789012345678901234nav02</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>All Trades</sys_name>
+        <sys_package display_value="Trade Management" source="x_snc_trade_mana_0">5166f94693c32210c0c0b45e1dba105d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Trade Management">5166f94693c32210c0c0b45e1dba105d</sys_scope>
+        <sys_update_name>sys_aw_workspace_nav_f6789012345678901234nav02</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-01 07:25:00</sys_updated_on>
+        <workspace display_value="Trade Book Workspace">a1b2c3d4e5f6789012345678901234ws</workspace>
+    </sys_aw_workspace_nav>
+    <sys_aw_workspace_nav action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <icon>bar-chart</icon>
+        <name>Analytics</name>
+        <order>300</order>
+        <page display_value="Trade Dashboard">d4e5f6789012345678901234pg03</page>
+        <sys_class_name>sys_aw_workspace_nav</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-01 07:25:00</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>a1b2c3d4e5f6789012345678901234nav03</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Analytics</sys_name>
+        <sys_package display_value="Trade Management" source="x_snc_trade_mana_0">5166f94693c32210c0c0b45e1dba105d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Trade Management">5166f94693c32210c0c0b45e1dba105d</sys_scope>
+        <sys_update_name>sys_aw_workspace_nav_a1b2c3d4e5f6789012345678901234nav03</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-01 07:25:00</sys_updated_on>
+        <workspace display_value="Trade Book Workspace">a1b2c3d4e5f6789012345678901234ws</workspace>
+    </sys_aw_workspace_nav>
+</record_update>

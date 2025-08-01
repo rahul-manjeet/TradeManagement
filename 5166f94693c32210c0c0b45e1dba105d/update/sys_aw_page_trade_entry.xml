@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_aw_page">
+    <sys_aw_page action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description>Data entry page for creating new trade records</description>
+        <name>Trade Entry</name>
+        <order>100</order>
+        <page_definition><![CDATA[{
+  "layout": {
+    "type": "container",
+    "children": [
+      {
+        "type": "header",
+        "title": "📈 New Trade Entry",
+        "subtitle": "Enter details for a new trading position",
+        "actions": [
+          {
+            "type": "button",
+            "label": "Save Trade",
+            "variant": "primary",
+            "action": "save_record"
+          },
+          {
+            "type": "button",
+            "label": "Clear Form",
+            "variant": "secondary",
+            "action": "clear_form"
+          }
+        ]
+      },
+      {
+        "type": "form",
+        "table": "x_snc_trade_mana_0_trade_book",
+        "fields": [
+          {
+            "name": "stock_name",
+            "label": "Stock Name",
+            "type": "string",
+            "required": true,
+            "placeholder": "e.g., Apple Inc. (AAPL)",
+            "help": "Enter the full stock name with ticker symbol"
+          },
+          {
+            "name": "buying_price",
+            "label": "Buying Price ($)",
+            "type": "string",
+            "required": true,
+            "placeholder": "e.g., 150.25",
+            "help": "Enter the purchase price per share"
+          },
+          {
+            "name": "stop_loss",
+            "label": "Stop Loss ($)",
+            "type": "string",
+            "required": true,
+            "placeholder": "e.g., 140.00",
+            "help": "Enter the stop loss price for risk management"
+          },
+          {
+            "name": "date",
+            "label": "Trade Date",
+            "type": "glide_date",
+            "required": true,
+            "default": "today",
+            "help": "Select the date when the trade was executed"
+          }
+        ],
+        "layout": "two_column"
+      },
+      {
+        "type": "info_panel",
+        "title": "💡 Trading Tips",
+        "content": [
+          {
+            "type": "text",
+            "value": "• Always set a stop loss to manage risk"
+          },
+          {
+            "type": "text",
+            "value": "• Research the stock thoroughly before investing"
+          },
+          {
+            "type": "text",
+            "value": "• Diversify your portfolio across different sectors"
+          },
+          {
+            "type": "text",
+            "value": "• Keep track of all your trades for tax purposes"
+          }
+        ]
+      }
+    ]
+  }
+}]]></page_definition>
+        <roles/>
+        <sys_class_name>sys_aw_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-01 07:10:00</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>b2c3d4e5f6789012345678901234pg01</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Trade Entry</sys_name>
+        <sys_package display_value="Trade Management" source="x_snc_trade_mana_0">5166f94693c32210c0c0b45e1dba105d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Trade Management">5166f94693c32210c0c0b45e1dba105d</sys_scope>
+        <sys_update_name>sys_aw_page_b2c3d4e5f6789012345678901234pg01</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-01 07:10:00</sys_updated_on>
+        <title>Trade Entry</title>
+        <workspace display_value="Trade Book Workspace">a1b2c3d4e5f6789012345678901234ws</workspace>
+    </sys_aw_page>
+</record_update>
