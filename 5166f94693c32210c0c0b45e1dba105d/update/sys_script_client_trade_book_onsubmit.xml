@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_client">
+    <sys_script_client action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <applies_extended>false</applies_extended>
+        <condition/>
+        <description>onSubmit client script for Trade Book table providing final validation before form submission</description>
+        <field/>
+        <global>true</global>
+        <isolate_script>true</isolate_script>
+        <messages/>
+        <name>Trade Book - Submit Validation</name>
+        <order/>
+        <script><![CDATA[function onSubmit() {
+    // Perform final validation before form submission
+    try {
+        // Get form values
+        var stockName = g_form.getValue('stock_name');
+        var buyingPrice = g_form.getValue('buying_price');
+        var stopLoss = g_form.getValue('stop_loss');
+        var tradeDate = g_form.getValue('date');
+        
+        // Clear any previous error messages
+        g_form.clearMessages();
+        
+        // Validate required fields
+        if (!stockName || stockName.trim() === '') {
+            g_form.addErrorMessage('Stock Name is required');
+            return false;
+        }
+        
+        if (!buyingPrice || buyingPrice.trim() === '') {
+            g_form.addErrorMessage('Buying Price is required');
+            return false;
+        }
+        
+        if (!stopLoss || stopLoss.trim() === '') {
+            g_form.addErrorMessage('Stop Loss is required');
+            return false;
+        }
+        
+        if (!tradeDate || tradeDate.trim() === '') {
+            g_form.addErrorMessage('Trade Date is required');
+            return false;
+        }
+        
+        // Validate numeric values
+        var buying = parseFloat(buyingPrice);
+        var stop = parseFloat(stopLoss);
+        
+        if (isNaN(buying) || buying <= 0) {
+            g_form.addErrorMessage('Buying Price must be a valid positive number');
+            return false;
+        }
+        
+        if (isNaN(stop) || stop <= 0) {
+            g_form.addErrorMessage('Stop Loss must be a valid positive number');
+            return false;
+        }
+        
+        // Validate stop loss is less than buying price
+        if (stop >= buying) {
+            g_form.addErrorMessage('Stop Loss must be lower than Buying Price');
+            return false;
+        }
+        
+        // Validate risk percentage is reasonable
+        var riskPercentage = ((buying - stop) / buying) * 100;
+        if (riskPercentage > 25) {
+            var confirmMessage = 'This trade has a high risk of ' + riskPercentage.toFixed(1) + '%. ' +
+                               'Are you sure you want to proceed with this stop loss?';
+            if (!confirm(confirmMessage)) {
+                return false;
+            }
+        }
+        
+        // Validate stock name format
+        var hasTickerPattern = /\([A-Z]{1,5}\)$/.test(stockName.trim());
+        if (!hasTickerPattern) {
+            var confirmStockName = 'Stock name does not include ticker symbol in standard format. ' +
+                                 'Continue anyway?';
+            if (!confirm(confirmStockName)) {
+                return false;
+            }
+        }
+        
+        // Validate trade date is not in the future
+        var today = new Date();
+        var inputDate = new Date(tradeDate);
+        
+        if (inputDate > today) {
+            var confirmFutureDate = 'Trade date is in the future. Are you sure this is correct?';
+            if (!confirm(confirmFutureDate)) {
+                return false;
+            }
+        }
+        
+        // Show success message and allow submission
+        g_form.addInfoMessage('✅ Trade validation successful. Submitting record...');
+        
+        // Log the submission for audit purposes
+        console.log('Trade Book submission validated:', {
+            stock: stockName,
+            buyingPrice: buyingPrice,
+            stopLoss: stopLoss,
+            risk: riskPercentage.toFixed(2) + '%',
+            date: tradeDate
+        });
+        
+        return true;
+        
+    } catch (error) {
+        console.error('Error in Trade Book onSubmit validation: ', error);
+        g_form.addErrorMessage('An error occurred during form validation. Please check your inputs and try again.');
+        return false;
+    }
+}]]></script>
+        <sys_class_name>sys_script_client</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-01 07:50:00</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>c3d4e5f6789012345678901234cs2</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Trade Book - Submit Validation</sys_name>
+        <sys_package display_value="Trade Management" source="x_snc_trade_mana_0">5166f94693c32210c0c0b45e1dba105d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Trade Management">5166f94693c32210c0c0b45e1dba105d</sys_scope>
+        <sys_update_name>sys_script_client_c3d4e5f6789012345678901234cs2</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-01 07:50:00</sys_updated_on>
+        <table>x_snc_trade_mana_0_trade_book</table>
+        <type>onSubmit</type>
+        <ui_type>10</ui_type>
+        <view/>
+    </sys_script_client>
+</record_update>
