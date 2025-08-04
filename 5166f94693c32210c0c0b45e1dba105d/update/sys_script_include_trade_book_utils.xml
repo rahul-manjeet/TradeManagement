@@ -11,6 +11,39 @@
 TradeBookUtils.prototype = {
     initialize: function() {
     },
+    
+    // Main method to handle AJAX calls from client scripts
+    process: function() {
+        var functionName = this.getParameter('sysparm_name');
+        
+        switch (functionName) {
+            case 'validateStockName':
+                var stockName = this.getParameter('sysparm_stock_name');
+                return JSON.stringify(this.validateStockName(stockName));
+                
+            case 'calculateRisk':
+                var buyingPrice = this.getParameter('sysparm_buying_price');
+                var stopLoss = this.getParameter('sysparm_stop_loss');
+                return JSON.stringify(this.calculateRisk(buyingPrice, stopLoss));
+                
+            case 'formatCurrency':
+                var value = this.getParameter('sysparm_value');
+                return JSON.stringify({success: true, formatted: this.formatCurrency(value)});
+                
+            case 'validateStopLoss':
+                var buyingPrice = this.getParameter('sysparm_buying_price');
+                var stopLoss = this.getParameter('sysparm_stop_loss');
+                return JSON.stringify(this.validateStopLoss(buyingPrice, stopLoss));
+                
+            case 'getTradeRecommendations':
+                var buyingPrice = this.getParameter('sysparm_buying_price');
+                var stopLoss = this.getParameter('sysparm_stop_loss');
+                return JSON.stringify(this.getTradeRecommendations(buyingPrice, stopLoss));
+                
+            default:
+                return JSON.stringify({success: false, message: 'Unknown function: ' + functionName});
+        }
+    },
 
     /**
      * Calculate risk percentage based on buying price and stop loss
@@ -69,7 +102,7 @@ TradeBookUtils.prototype = {
                 return {
                     success: false,
                     message: 'Stock name should include ticker symbol in parentheses (e.g., Apple Inc. (AAPL))',
-                    suggestion: 'Add ticker symbol in format: ' + name + ' (TICKER)'
+                    suggestions: ['Add ticker symbol in format: ' + name + ' (TICKER)']
                 };
             }
             

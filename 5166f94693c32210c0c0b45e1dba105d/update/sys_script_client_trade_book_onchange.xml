@@ -22,30 +22,55 @@
 
 // Handle stock name validation
 function handleStockNameChange(stockName) {
-    if (!stockName || stockName.trim() === '') {
+    try {
+        // Clear previous messages
         g_form.clearMessages('stock_name');
-        return;
+        
+        if (!stockName || stockName.trim() === '') {
+            return;
+        }
+        
+        // Debug: Show that the function is being called
+        console.log('TradeBook onChange: Validating stock name: ' + stockName);
+        
+        // Call server-side validation
+        var ga = new GlideAjax('TradeBookUtils');
+        ga.addParam('sysparm_name', 'validateStockName');
+        ga.addParam('sysparm_stock_name', stockName);
+        
+        ga.getXMLAnswer(function(answer) {
+            try {
+                console.log('TradeBook onChange: Server response: ' + answer);
+                
+                if (!answer) {
+                    g_form.showFieldMsg('stock_name', 'No response from server. Check Script Include.', 'error');
+                    return;
+                }
+                
+                var result = JSON.parse(answer);
+                
+                if (result.success) {
+                    g_form.showFieldMsg('stock_name', '✓ ' + result.message, 'info');
+                } else {
+                    g_form.showFieldMsg('stock_name', '⚠ ' + result.message, 'warning');
+                    
+                    // Show suggestions if available
+                    if (result.suggestions && result.suggestions.length > 0) {
+                        var suggestionMsg = 'Suggestions: ' + result.suggestions.join(', ');
+                        g_form.showFieldMsg('stock_name', suggestionMsg, 'info');
+                    }
+                }
+                
+            } catch (parseError) {
+                console.error('TradeBook onChange: Error parsing response: ', parseError);
+                g_form.showFieldMsg('stock_name', 'Error parsing server response: ' + parseError.message, 'error');
+            }
+        });
+        
+    } catch (error) {
+        console.error('TradeBook onChange: Error in handleStockNameChange: ', error);
+        g_form.showFieldMsg('stock_name', 'Script error: ' + error.message, 'error');
     }
-    
-    // Call server-side validation
-    var ga = new GlideAjax('TradeBookUtils');
-    ga.addParam('sysparm_name', 'validateStockName');
-    ga.addParam('sysparm_stock_name', stockName);
-    ga.getXMLAnswer(function(answer) {
-        var result = JSON.parse(answer);
-        
-        if (result.success) {
-            g_form.showFieldMsg('stock_name', result.message, 'info');
-        } else {
-            g_form.showFieldMsg('stock_name', result.message, 'warning');
-        }
-        
-        // Show suggestions if available
-        if (result.suggestions && result.suggestions.length > 0) {
-            var suggestionMsg = 'Suggestions: ' + result.suggestions.join(', ');
-            g_form.showFieldMsg('stock_name', suggestionMsg, 'info');
-        }
-    });
 }]]></script>
         <sys_class_name>sys_script_client</sys_class_name>
         <sys_created_by>admin</sys_created_by>
