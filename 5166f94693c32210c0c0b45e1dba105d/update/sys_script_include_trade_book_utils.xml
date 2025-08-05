@@ -8,7 +8,7 @@
         <description>Client-callable script include for Trade Book utility functions</description>
         <name>TradeBookUtils</name>
         <script><![CDATA[var TradeBookUtils = Class.create();
-TradeBookUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+TradeBookUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
     
     testConnection: function() {
         return 'HELLO FROM SCRIPT INCLUDE';

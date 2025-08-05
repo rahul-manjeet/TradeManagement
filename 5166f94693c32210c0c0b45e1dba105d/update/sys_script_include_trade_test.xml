@@ -8,7 +8,7 @@
         <description>Simple test script include</description>
         <name>TradeTest</name>
         <script><![CDATA[var TradeTest = Class.create();
-TradeTest.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+TradeTest.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
     
     hello: function() {
         return 'Hello World from TradeTest';
