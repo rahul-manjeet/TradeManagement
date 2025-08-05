@@ -35,8 +35,7 @@
         console.log('onChange: Testing AJAX call to TradeBookUtils...');
         
         var ga = new GlideAjax('TradeBookUtils');
-        ga.addParam('sysparm_name', 'test');
-        ga.addParam('sysparm_stock_name', newValue);
+        ga.addParam('sysparm_name', 'testConnection');
         
         ga.getXMLAnswer(function(answer) {
             console.log('onChange: AJAX Response received: ' + answer);

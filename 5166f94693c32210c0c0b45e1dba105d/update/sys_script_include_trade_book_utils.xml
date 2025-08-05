@@ -11,8 +11,8 @@
 TradeBookUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
     
     // Test method for debugging
-    test: function() {
-        return JSON.stringify({success: true, message: 'Script Include is working! AJAX call successful.'});
+    testConnection: function() {
+        return 'Script Include is working! AJAX call successful.';
     },
     
     // Simple validateStockName method for testing
