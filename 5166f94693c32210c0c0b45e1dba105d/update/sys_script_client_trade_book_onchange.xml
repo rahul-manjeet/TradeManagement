@@ -11,33 +11,47 @@
         <name>Trade Book - Dynamic Validation</name>
         <order/>
         <script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
-    // BASIC TEST: Just show an alert to confirm onChange is working
-    alert('onChange triggered! Field: ' + control.getName() + ', Old: ' + oldValue + ', New: ' + newValue);
-    
-    // Don't run during loading
-    if (isLoading) {
-        console.log('onChange: Skipping because isLoading is true');
-        return;
+    try {
+        // BASIC TEST: Just show an alert to confirm onChange is working
+        alert('onChange triggered! Old: ' + oldValue + ', New: ' + newValue);
+        
+        // Don't run during loading
+        if (isLoading) {
+            console.log('onChange: Skipping because isLoading is true');
+            return;
+        }
+        
+        // Don't run if value didn't change
+        if (newValue == oldValue) {
+            console.log('onChange: Skipping because value did not change');
+            return;
+        }
+        
+        // Simple test message
+        console.log('onChange: Showing field message...');
+        g_form.showFieldMsg('stock_name', 'onChange script is working! You entered: ' + newValue, 'info');
+        
+        // Test AJAX call with very simple response
+        console.log('onChange: Testing AJAX call to TradeBookUtils...');
+        
+        var ga = new GlideAjax('TradeBookUtils');
+        ga.addParam('sysparm_name', 'test');
+        ga.addParam('sysparm_stock_name', newValue);
+        
+        ga.getXMLAnswer(function(answer) {
+            console.log('onChange: AJAX Response received: ' + answer);
+            if (answer) {
+                g_form.showFieldMsg('stock_name', 'Server responded: ' + answer, 'info');
+            } else {
+                console.log('onChange: No response from server');
+                g_form.showFieldMsg('stock_name', 'No response from server - check Script Include', 'error');
+            }
+        });
+        
+    } catch (error) {
+        console.error('onChange: Error in script: ', error);
+        alert('Error in onChange script: ' + error.message);
     }
-    
-    // Don't run if value didn't change
-    if (newValue == oldValue) {
-        console.log('onChange: Skipping because value did not change');
-        return;
-    }
-    
-    // Simple test message
-    g_form.showFieldMsg('stock_name', 'onChange script is working! You entered: ' + newValue, 'info');
-    
-    // Test AJAX call with very simple response
-    console.log('Testing AJAX call to TradeBookUtils...');
-    
-    var ga = new GlideAjax('TradeBookUtils');
-    ga.addParam('sysparm_name', 'test');
-    ga.getXMLAnswer(function(answer) {
-        console.log('AJAX Response received: ' + answer);
-        g_form.showFieldMsg('stock_name', 'Server responded: ' + answer, 'info');
-    });
 }]]></script>
         <sys_class_name>sys_script_client</sys_class_name>
         <sys_created_by>admin</sys_created_by>
