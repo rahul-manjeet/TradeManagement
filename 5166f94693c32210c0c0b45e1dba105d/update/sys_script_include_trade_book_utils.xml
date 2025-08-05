@@ -40,6 +40,9 @@ TradeBookUtils.prototype = {
                 var stopLoss = this.getParameter('sysparm_stop_loss');
                 return JSON.stringify(this.getTradeRecommendations(buyingPrice, stopLoss));
                 
+            case 'test':
+                return JSON.stringify({success: true, message: 'Script Include is working! AJAX call successful.'});
+                
             default:
                 return JSON.stringify({success: false, message: 'Unknown function: ' + functionName});
         }
