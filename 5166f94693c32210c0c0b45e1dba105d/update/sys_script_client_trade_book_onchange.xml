@@ -11,56 +11,131 @@
         <name>Trade Book - Dynamic Validation</name>
         <order/>
         <script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
-    // Skip if loading or no change
-    if (isLoading || newValue == oldValue) {
+    // Skip if loading, template, or no actual change
+    if (isLoading || isTemplate || newValue == oldValue) {
         return;
     }
     
-    console.log('=== DUAL SCRIPT INCLUDE TEST ===');
-    
-    // Test 1: Original TradeBookUtils
-    console.log('Test 1: TradeBookUtils.testConnection');
-    var ajax1 = new GlideAjax('TradeBookUtils');
-    ajax1.addParam('sysparm_name', 'testConnection');
-    ajax1.getXMLAnswer(function(response) {
-        console.log('TradeBookUtils Response: "' + response + '"');
-        if (response && response !== 'null' && response.trim() !== '') {
-            g_form.showFieldMsg('stock_name', 'TradeBookUtils SUCCESS: ' + response, 'info');
-        } else {
-            g_form.showFieldMsg('stock_name', 'TradeBookUtils FAILED: null response', 'error');
+    // Only handle stock name changes
+    handleStockNameValidation(newValue);
+}
+
+/**
+ * Handle real-time stock name validation with suggestions
+ * @param {string} stockName - The stock name to validate
+ */
+function handleStockNameValidation(stockName) {
+    try {
+        // Clear previous messages
+        g_form.clearMessages('stock_name');
+        
+        // Skip validation for empty values
+        if (!stockName || stockName.trim() === '') {
+            return;
         }
-    });
-    
-    // Test 2: Alternative TradeTest
-    setTimeout(function() {
-        console.log('Test 2: TradeTest.hello');
-        var ajax2 = new GlideAjax('TradeTest');
-        ajax2.addParam('sysparm_name', 'hello');
-        ajax2.getXMLAnswer(function(response) {
-            console.log('TradeTest Response: "' + response + '"');
-            if (response && response !== 'null' && response.trim() !== '') {
-                g_form.showFieldMsg('stock_name', 'TradeTest SUCCESS: ' + response, 'info');
-            } else {
-                g_form.showFieldMsg('stock_name', 'TradeTest FAILED: null response', 'error');
+        
+        // Call server-side validation
+        var ajax = new GlideAjax('TradeBookUtils');
+        ajax.addParam('sysparm_name', 'validateStockName');
+        ajax.addParam('sysparm_stock_name', stockName);
+        
+        ajax.getXMLAnswer(function(response) {
+            try {
+                if (!response) {
+                    g_form.showFieldMsg('stock_name', 'Validation service unavailable', 'error');
+                    return;
+                }
+                
+                var result = JSON.parse(response);
+                
+                if (result.success) {
+                    // Valid stock name format
+                    g_form.showFieldMsg('stock_name', '✅ ' + result.message, 'info');
+                } else {
+                    // Invalid format with suggestion
+                    var message = '⚠️ ' + result.message;
+                    g_form.showFieldMsg('stock_name', message, 'warning');
+                    
+                    // Show suggestion if available
+                    if (result.suggestion) {
+                        g_form.showFieldMsg('stock_name', '💡 Suggestion: ' + result.suggestion, 'info');
+                    }
+                }
+                
+                // If both buying price and stop loss are available, calculate risk
+                var buyingPrice = g_form.getValue('buying_price');
+                var stopLoss = g_form.getValue('stop_loss');
+                
+                if (buyingPrice && stopLoss && result.success) {
+                    calculateRiskAndRecommendations(buyingPrice, stopLoss);
+                }
+                
+            } catch (parseError) {
+                g_form.showFieldMsg('stock_name', 'Validation error: ' + parseError.message, 'error');
             }
         });
-    }, 1000);
-    
-    // Test 3: TradeTest with parameter
-    setTimeout(function() {
-        console.log('Test 3: TradeTest.echo with parameter');
-        var ajax3 = new GlideAjax('TradeTest');
-        ajax3.addParam('sysparm_name', 'echo');
-        ajax3.addParam('sysparm_input', newValue);
-        ajax3.getXMLAnswer(function(response) {
-            console.log('TradeTest Echo Response: "' + response + '"');
-            if (response && response !== 'null' && response.trim() !== '') {
-                g_form.showFieldMsg('stock_name', 'TradeTest Echo SUCCESS: ' + response, 'info');
-            } else {
-                g_form.showFieldMsg('stock_name', 'TradeTest Echo FAILED: null response', 'error');
+        
+    } catch (error) {
+        g_form.showFieldMsg('stock_name', 'Script error: ' + error.message, 'error');
+    }
+}
+
+/**
+ * Calculate risk and provide trading recommendations
+ * @param {string} buyingPrice - The buying price
+ * @param {string} stopLoss - The stop loss price
+ */
+function calculateRiskAndRecommendations(buyingPrice, stopLoss) {
+    try {
+        // Calculate risk
+        var riskAjax = new GlideAjax('TradeBookUtils');
+        riskAjax.addParam('sysparm_name', 'calculateRisk');
+        riskAjax.addParam('sysparm_buying_price', buyingPrice);
+        riskAjax.addParam('sysparm_stop_loss', stopLoss);
+        
+        riskAjax.getXMLAnswer(function(response) {
+            try {
+                if (!response) return;
+                
+                var riskResult = JSON.parse(response);
+                
+                if (riskResult.success) {
+                    // Show risk information
+                    g_form.addInfoMessage('📊 ' + riskResult.message);
+                    
+                    // Get trading recommendations
+                    var recAjax = new GlideAjax('TradeBookUtils');
+                    recAjax.addParam('sysparm_name', 'getTradeRecommendations');
+                    recAjax.addParam('sysparm_buying_price', buyingPrice);
+                    recAjax.addParam('sysparm_stop_loss', stopLoss);
+                    
+                    recAjax.getXMLAnswer(function(recResponse) {
+                        try {
+                            if (!recResponse) return;
+                            
+                            var recResult = JSON.parse(recResponse);
+                            
+                            if (recResult.success && recResult.recommendations) {
+                                // Display recommendations
+                                recResult.recommendations.forEach(function(rec) {
+                                    g_form.addInfoMessage(rec.icon + ' ' + rec.message);
+                                });
+                            }
+                            
+                        } catch (recError) {
+                            // Silently handle recommendation errors
+                        }
+                    });
+                }
+                
+            } catch (riskError) {
+                // Silently handle risk calculation errors
             }
         });
-    }, 2000);
+        
+    } catch (error) {
+        // Silently handle calculation errors
+    }
 }]]></script>
         <sys_class_name>sys_script_client</sys_class_name>
         <sys_created_by>admin</sys_created_by>

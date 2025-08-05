@@ -11,106 +11,128 @@
         <name>Trade Book - Submit Validation</name>
         <order/>
         <script><![CDATA[function onSubmit() {
-    // Perform final validation before form submission
+    // Final validation before form submission
     try {
-        // Get form values
         var stockName = g_form.getValue('stock_name');
         var buyingPrice = g_form.getValue('buying_price');
         var stopLoss = g_form.getValue('stop_loss');
         var tradeDate = g_form.getValue('date');
         
-        // Clear any previous error messages
-        g_form.clearMessages();
-        
-        // Validate required fields
+        // Required field validation
         if (!stockName || stockName.trim() === '') {
-            g_form.addErrorMessage('Stock Name is required');
+            g_form.addErrorMessage('❌ Stock name is required');
             return false;
         }
         
         if (!buyingPrice || buyingPrice.trim() === '') {
-            g_form.addErrorMessage('Buying Price is required');
+            g_form.addErrorMessage('❌ Buying price is required');
             return false;
         }
         
         if (!stopLoss || stopLoss.trim() === '') {
-            g_form.addErrorMessage('Stop Loss is required');
+            g_form.addErrorMessage('❌ Stop loss is required');
             return false;
         }
         
-        if (!tradeDate || tradeDate.trim() === '') {
-            g_form.addErrorMessage('Trade Date is required');
-            return false;
-        }
-        
-        // Validate numeric values
+        // Numeric validation
         var buying = parseFloat(buyingPrice);
         var stop = parseFloat(stopLoss);
         
         if (isNaN(buying) || buying <= 0) {
-            g_form.addErrorMessage('Buying Price must be a valid positive number');
+            g_form.addErrorMessage('❌ Buying price must be a positive number');
             return false;
         }
         
         if (isNaN(stop) || stop <= 0) {
-            g_form.addErrorMessage('Stop Loss must be a valid positive number');
+            g_form.addErrorMessage('❌ Stop loss must be a positive number');
             return false;
         }
         
-        // Validate stop loss is less than buying price
+        // Logical validation
         if (stop >= buying) {
-            g_form.addErrorMessage('Stop Loss must be lower than Buying Price');
+            g_form.addErrorMessage('❌ Stop loss must be lower than buying price');
             return false;
         }
         
-        // Validate risk percentage is reasonable
+        // Risk percentage validation
         var riskPercentage = ((buying - stop) / buying) * 100;
+        
         if (riskPercentage > 25) {
-            var confirmMessage = 'This trade has a high risk of ' + riskPercentage.toFixed(1) + '%. ' +
-                               'Are you sure you want to proceed with this stop loss?';
-            if (!confirm(confirmMessage)) {
+            var confirmHighRisk = confirm(
+                '⚠️ HIGH RISK TRADE DETECTED \n\n' +
+                'Risk Level: ' + riskPercentage.toFixed(1) + '%\n' +
+                'Risk Amount: $' + (buying - stop).toFixed(2) + '\n\n' +
+                'This exceeds the recommended 25% risk threshold.\n' +
+                'Consider adjusting your stop loss to reduce risk.\n\n' +
+                'Do you want to proceed with this high-risk trade?'
+            );
+            
+            if (!confirmHighRisk) {
+                g_form.showFieldMsg('stop_loss', '⚠️ Consider a tighter stop loss to reduce risk', 'warning');
                 return false;
             }
         }
         
-        // Validate stock name format
+        // Stock name format validation
         var hasTickerPattern = /\([A-Z]{1,5}\)$/.test(stockName.trim());
+        
         if (!hasTickerPattern) {
-            var confirmStockName = 'Stock name does not include ticker symbol in standard format. ' +
-                                 'Continue anyway?';
-            if (!confirm(confirmStockName)) {
+            var confirmFormat = confirm(
+                '📝 STOCK NAME FORMAT NOTICE\n\n' +
+                'Current: ' + stockName + '\n' +
+                'Recommended format: Company Name (TICKER)\n' +
+                'Example: Apple Inc. (AAPL)\n\n' +
+                'Proper format helps with:\n' +
+                '• Trade tracking and reporting\n' +
+                '• Integration with market data\n' +
+                '• Portfolio analysis\n\n' +
+                'Do you want to proceed with the current format?'
+            );
+            
+            if (!confirmFormat) {
+                g_form.showFieldMsg('stock_name', '💡 Use format: Company Name (TICKER)', 'info');
                 return false;
             }
         }
         
-        // Validate trade date is not in the future
-        var today = new Date();
-        var inputDate = new Date(tradeDate);
-        
-        if (inputDate > today) {
-            var confirmFutureDate = 'Trade date is in the future. Are you sure this is correct?';
-            if (!confirm(confirmFutureDate)) {
-                return false;
+        // Date validation
+        if (tradeDate) {
+            var today = new Date();
+            var selectedDate = new Date(tradeDate);
+            
+            if (selectedDate > today) {
+                var confirmFutureDate = confirm(
+                    '📅 FUTURE DATE DETECTED\n\n' +
+                    'Trade date: ' + tradeDate + '\n' +
+                    'Today: ' + today.toISOString().split('T')[0] + '\n\n' +
+                    'Are you planning a future trade or is this a mistake?'
+                );
+                
+                if (!confirmFutureDate) {
+                    g_form.showFieldMsg('date', '📅 Please verify the trade date', 'warning');
+                    return false;
+                }
             }
         }
         
-        // Show success message and allow submission
-        g_form.addInfoMessage('✅ Trade validation successful. Submitting record...');
+        // Success message and logging
+        g_form.addInfoMessage('✅ Trade validation passed - submitting record...');
         
-        // Log the submission for audit purposes
+        // Log successful submission for audit
         console.log('Trade Book submission validated:', {
             stock: stockName,
-            buyingPrice: buyingPrice,
-            stopLoss: stopLoss,
-            risk: riskPercentage.toFixed(2) + '%',
-            date: tradeDate
+            buyingPrice: '$' + buying.toFixed(2),
+            stopLoss: '$' + stop.toFixed(2),
+            riskPercentage: riskPercentage.toFixed(2) + '%',
+            riskAmount: '$' + (buying - stop).toFixed(2),
+            date: tradeDate || 'Not specified'
         });
         
         return true;
         
     } catch (error) {
-        console.error('Error in Trade Book onSubmit validation: ', error);
-        g_form.addErrorMessage('An error occurred during form validation. Please check your inputs and try again.');
+        g_form.addErrorMessage('❌ Validation error: ' + error.message);
+        console.error('Trade Book onSubmit error:', error);
         return false;
     }
 }]]></script>

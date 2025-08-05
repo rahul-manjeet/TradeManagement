@@ -10,25 +10,233 @@
         <script><![CDATA[var TradeBookUtils = Class.create();
 TradeBookUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
     
-    testConnection: function() {
-        return 'HELLO FROM SCRIPT INCLUDE';
+    /**
+     * Validate stock name format and provide suggestions
+     * @returns {string} JSON string with validation result
+     */
+    validateStockName: function() {
+        try {
+            var stockName = this.getParameter('sysparm_stock_name');
+            
+            if (!stockName || stockName.trim() === '') {
+                return JSON.stringify({
+                    success: false,
+                    message: 'Stock name is required',
+                    type: 'error'
+                });
+            }
+            
+            var name = stockName.trim();
+            var hasTickerPattern = /\([A-Z]{1,5}\)$/.test(name);
+            
+            if (!hasTickerPattern) {
+                // Extract potential ticker from the name
+                var words = name.split(' ');
+                var lastWord = words[words.length - 1];
+                var suggestion = '';
+                
+                // Common stock name patterns
+                if (name.toLowerCase().includes('apple')) {
+                    suggestion = 'Apple Inc. (AAPL)';
+                } else if (name.toLowerCase().includes('microsoft')) {
+                    suggestion = 'Microsoft Corporation (MSFT)';
+                } else if (name.toLowerCase().includes('amazon')) {
+                    suggestion = 'Amazon.com Inc. (AMZN)';
+                } else if (name.toLowerCase().includes('tesla')) {
+                    suggestion = 'Tesla Inc. (TSLA)';
+                } else if (name.toLowerCase().includes('google')) {
+                    suggestion = 'Alphabet Inc. (GOOGL)';
+                } else {
+                    suggestion = name + ' (TICKER)';
+                }
+                
+                return JSON.stringify({
+                    success: false,
+                    message: 'Stock name should include ticker symbol in parentheses',
+                    suggestion: suggestion,
+                    type: 'warning'
+                });
+            }
+            
+            return JSON.stringify({
+                success: true,
+                message: 'Stock name format is valid',
+                type: 'success'
+            });
+            
+        } catch (error) {
+            return JSON.stringify({
+                success: false,
+                message: 'Error validating stock name: ' + error.message,
+                type: 'error'
+            });
+        }
     },
     
-    validateStockName: function() {
-        var stockName = this.getParameter('sysparm_stock_name');
-        
-        if (!stockName || stockName.trim() === '') {
-            return 'Stock name is required';
+    /**
+     * Calculate risk percentage and amount based on buying price and stop loss
+     * @returns {string} JSON string with risk calculation
+     */
+    calculateRisk: function() {
+        try {
+            var buyingPrice = parseFloat(this.getParameter('sysparm_buying_price'));
+            var stopLoss = parseFloat(this.getParameter('sysparm_stop_loss'));
+            
+            if (isNaN(buyingPrice) || isNaN(stopLoss) || buyingPrice <= 0 || stopLoss <= 0) {
+                return JSON.stringify({
+                    success: false,
+                    message: 'Invalid price values provided',
+                    type: 'error'
+                });
+            }
+            
+            if (stopLoss >= buyingPrice) {
+                return JSON.stringify({
+                    success: false,
+                    message: 'Stop loss must be lower than buying price',
+                    type: 'error'
+                });
+            }
+            
+            var riskAmount = buyingPrice - stopLoss;
+            var riskPercentage = (riskAmount / buyingPrice) * 100;
+            
+            var riskLevel = 'Low';
+            var riskColor = 'success';
+            if (riskPercentage > 15) {
+                riskLevel = 'High';
+                riskColor = 'warning';
+            } else if (riskPercentage > 8) {
+                riskLevel = 'Medium';
+                riskColor = 'info';
+            }
+            
+            return JSON.stringify({
+                success: true,
+                riskAmount: riskAmount.toFixed(2),
+                riskPercentage: riskPercentage.toFixed(2),
+                riskLevel: riskLevel,
+                riskColor: riskColor,
+                message: 'Risk calculated: $' + riskAmount.toFixed(2) + ' (' + riskPercentage.toFixed(1) + '%) - ' + riskLevel + ' Risk',
+                type: riskColor
+            });
+            
+        } catch (error) {
+            return JSON.stringify({
+                success: false,
+                message: 'Error calculating risk: ' + error.message,
+                type: 'error'
+            });
         }
-        
-        var name = stockName.trim();
-        var hasTickerPattern = /\([A-Z]{1,5}\)$/.test(name);
-        
-        if (!hasTickerPattern) {
-            return 'Stock name should include ticker symbol in parentheses (e.g., Apple Inc. (AAPL))';
+    },
+    
+    /**
+     * Get trading recommendations based on risk analysis
+     * @returns {string} JSON string with trading recommendations
+     */
+    getTradeRecommendations: function() {
+        try {
+            var buyingPrice = parseFloat(this.getParameter('sysparm_buying_price'));
+            var stopLoss = parseFloat(this.getParameter('sysparm_stop_loss'));
+            
+            if (isNaN(buyingPrice) || isNaN(stopLoss)) {
+                return JSON.stringify({
+                    success: false,
+                    message: 'Invalid price values for recommendations',
+                    type: 'error'
+                });
+            }
+            
+            var riskPercentage = ((buyingPrice - stopLoss) / buyingPrice) * 100;
+            var recommendations = [];
+            
+            // Risk-based recommendations
+            if (riskPercentage > 20) {
+                recommendations.push({
+                    type: 'warning',
+                    icon: '⚠️',
+                    message: 'High risk trade (' + riskPercentage.toFixed(1) + '%). Consider tighter stop loss.'
+                });
+            } else if (riskPercentage < 2) {
+                recommendations.push({
+                    type: 'info',
+                    icon: 'ℹ️',
+                    message: 'Very conservative stop loss. Consider if upside potential justifies limited risk.'
+                });
+            } else {
+                recommendations.push({
+                    type: 'success',
+                    icon: '✅',
+                    message: 'Good risk management with ' + riskPercentage.toFixed(1) + '% risk.'
+                });
+            }
+            
+            // Price-based recommendations
+            if (buyingPrice > 1000) {
+                recommendations.push({
+                    type: 'info',
+                    icon: '💡',
+                    message: 'High-value stock. Consider position sizing and portfolio allocation.'
+                });
+            }
+            
+            // Target price suggestion (2:1 reward-to-risk ratio)
+            var suggestedTarget = buyingPrice + (buyingPrice - stopLoss) * 2;
+            recommendations.push({
+                type: 'info',
+                icon: '🎯',
+                message: 'Suggested target price (2:1 ratio): $' + suggestedTarget.toFixed(2)
+            });
+            
+            return JSON.stringify({
+                success: true,
+                recommendations: recommendations,
+                suggestedTarget: suggestedTarget.toFixed(2),
+                type: 'success'
+            });
+            
+        } catch (error) {
+            return JSON.stringify({
+                success: false,
+                message: 'Error generating recommendations: ' + error.message,
+                type: 'error'
+            });
         }
-        
-        return 'Stock name format is valid';
+    },
+    
+    /**
+     * Format currency values for display
+     * @returns {string} JSON string with formatted currency
+     */
+    formatCurrency: function() {
+        try {
+            var value = this.getParameter('sysparm_value');
+            var num = parseFloat(value);
+            
+            if (isNaN(num)) {
+                return JSON.stringify({
+                    success: false,
+                    message: 'Invalid number format',
+                    type: 'error'
+                });
+            }
+            
+            var formatted = '$' + num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            
+            return JSON.stringify({
+                success: true,
+                formatted: formatted,
+                message: 'Currency formatted successfully',
+                type: 'success'
+            });
+            
+        } catch (error) {
+            return JSON.stringify({
+                success: false,
+                message: 'Error formatting currency: ' + error.message,
+                type: 'error'
+            });
+        }
     }
     
 });]]></script>
