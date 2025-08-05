@@ -16,23 +16,51 @@
         return;
     }
     
-    console.log('=== SIMPLE AJAX TEST ===');
-    console.log('Calling TradeBookUtils.testConnection...');
+    console.log('=== DUAL SCRIPT INCLUDE TEST ===');
     
-    var ajax = new GlideAjax('TradeBookUtils');
-    ajax.addParam('sysparm_name', 'testConnection');
-    
-    ajax.getXMLAnswer(function(response) {
-        console.log('Response received: "' + response + '"');
-        console.log('Response type: ' + typeof response);
-        console.log('Response length: ' + (response ? response.length : 'null'));
-        
+    // Test 1: Original TradeBookUtils
+    console.log('Test 1: TradeBookUtils.testConnection');
+    var ajax1 = new GlideAjax('TradeBookUtils');
+    ajax1.addParam('sysparm_name', 'testConnection');
+    ajax1.getXMLAnswer(function(response) {
+        console.log('TradeBookUtils Response: "' + response + '"');
         if (response && response !== 'null' && response.trim() !== '') {
-            g_form.showFieldMsg('stock_name', 'SUCCESS: ' + response, 'info');
+            g_form.showFieldMsg('stock_name', 'TradeBookUtils SUCCESS: ' + response, 'info');
         } else {
-            g_form.showFieldMsg('stock_name', 'FAILED: Response is null/empty', 'error');
+            g_form.showFieldMsg('stock_name', 'TradeBookUtils FAILED: null response', 'error');
         }
     });
+    
+    // Test 2: Alternative TradeTest
+    setTimeout(function() {
+        console.log('Test 2: TradeTest.hello');
+        var ajax2 = new GlideAjax('TradeTest');
+        ajax2.addParam('sysparm_name', 'hello');
+        ajax2.getXMLAnswer(function(response) {
+            console.log('TradeTest Response: "' + response + '"');
+            if (response && response !== 'null' && response.trim() !== '') {
+                g_form.showFieldMsg('stock_name', 'TradeTest SUCCESS: ' + response, 'info');
+            } else {
+                g_form.showFieldMsg('stock_name', 'TradeTest FAILED: null response', 'error');
+            }
+        });
+    }, 1000);
+    
+    // Test 3: TradeTest with parameter
+    setTimeout(function() {
+        console.log('Test 3: TradeTest.echo with parameter');
+        var ajax3 = new GlideAjax('TradeTest');
+        ajax3.addParam('sysparm_name', 'echo');
+        ajax3.addParam('sysparm_input', newValue);
+        ajax3.getXMLAnswer(function(response) {
+            console.log('TradeTest Echo Response: "' + response + '"');
+            if (response && response !== 'null' && response.trim() !== '') {
+                g_form.showFieldMsg('stock_name', 'TradeTest Echo SUCCESS: ' + response, 'info');
+            } else {
+                g_form.showFieldMsg('stock_name', 'TradeTest Echo FAILED: null response', 'error');
+            }
+        });
+    }, 2000);
 }]]></script>
         <sys_class_name>sys_script_client</sys_class_name>
         <sys_created_by>admin</sys_created_by>

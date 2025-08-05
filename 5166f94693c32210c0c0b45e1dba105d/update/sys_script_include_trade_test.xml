@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>TradeTest</api_name>
+        <caller_access/>
+        <client_callable>true</client_callable>
+        <description>Simple test script include</description>
+        <name>TradeTest</name>
+        <script><![CDATA[var TradeTest = Class.create();
+TradeTest.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+    
+    hello: function() {
+        return 'Hello World from TradeTest';
+    },
+    
+    echo: function() {
+        var input = this.getParameter('sysparm_input');
+        return 'Echo: ' + input;
+    }
+    
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-05 12:00:00</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>test123456789012345678901234si</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>TradeTest</sys_name>
+        <sys_package display_value="Trade Management" source="x_snc_trade_mana_0">5166f94693c32210c0c0b45e1dba105d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Trade Management">5166f94693c32210c0c0b45e1dba105d</sys_scope>
+        <sys_update_name>sys_script_include_test123456789012345678901234si</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-05 12:00:00</sys_updated_on>
+    </sys_script_include>
+</record_update>
